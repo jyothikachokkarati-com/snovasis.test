@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: mindbridge-wellness-platform
+    runtime: node
+    plan: free
+    region: oregon
+    branch: main
+    buildCommand: npm --prefix mindbridge-wellness-platform install
+    startCommand: node mindbridge-wellness-platform/server/index.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        generateValue: false
+        value: 10000
