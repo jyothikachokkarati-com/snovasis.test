@@ -1,0 +1,12 @@
+{
+  "name": "mindbridge-workspace-root",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Root workspace runner for MindBridge Student Wellness & Peer Support Platform",
+  "scripts": {
+    "start": "node mindbridge-wellness-platform/server/index.js",
+    "dev": "node mindbridge-wellness-platform/server/index.js",
+    "test": "npm --prefix mindbridge-wellness-platform test"
+  }
+}
+

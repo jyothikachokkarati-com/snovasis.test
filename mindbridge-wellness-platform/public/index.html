@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MindBridge — Student Wellness & Clinical Care Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" aria-label="Primary Navigation">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="brand-text">
+          <h2>MindBridge</h2>
+          <span class="badge-role" id="sidebar-role-badge">Clinical v3.0</span>
+        </div>
+      </div>
+
+      <!-- Role Switcher -->
+      <div class="role-switcher-box">
+        <label for="role-select" class="role-label">Active Portal Role</label>
+        <select id="role-select" class="input-control role-select">
+          <option value="student">🎓 Student Portal</option>
+          <option value="counselor">🤝 Peer / Care Provider</option>
+          <option value="admin">🏥 Clinical Admin</option>
+        </select>
+      </div>
+
+      <nav class="nav-links">
+        <button class="nav-item active" data-target="dashboard">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Wellness Hub</span>
+        </button>
+        <button class="nav-item" data-target="assessments">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+          <span>PHQ-9 & GAD-7</span>
+        </button>
+        <button class="nav-item" data-target="counselors">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span>Care Directory</span>
+        </button>
+        <button class="nav-item" data-target="destress">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8"></path><path d="M12 8v8"></path></svg>
+          <span>Autonomic Pacer</span>
+        </button>
+        <button class="nav-item" data-target="community">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          <span>Safe Peer Forum</span>
+        </button>
+        <button class="nav-item" data-target="governance">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span>HIPAA / GDPR Vault</span>
+        </button>
+        <button class="nav-item" data-target="crisis">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 22 22 22 12 2"></polygon><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span>Crisis Support (24/7)</span>
+        </button>
+      </nav>
+
+      <div class="user-profile-card" id="user-profile-card">
+        <div class="avatar" id="user-avatar">BM</div>
+        <div class="user-meta">
+          <strong id="user-display-name">Balaji M.</strong>
+          <small id="user-display-sub">Computer Science • Year 3</small>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1 id="page-title">Wellness Hub & Longitudinal Diagnostics</h1>
+          <p id="page-subtitle">Structured Likert mood logging, zero-knowledge encrypted journaling, and intelligent crisis triage.</p>
+        </div>
+        <div class="topbar-actions">
+          <button type="button" class="status-indicator btn-anon-toggle" id="btn-anon-toggle" aria-pressed="false" title="Toggle Zero-PII Anonymous UUID Mode">
+            <span class="status-dot" id="anon-status-dot"></span>
+            <span id="anon-status-text">Anonymous Mode: Off</span>
+          </button>
+          <button class="btn btn-secondary" id="btn-toggle-panic">⚡ Autonomic Calming Drill</button>
+        </div>
+      </header>
+
+      <!-- Role Context Banner -->
+      <div id="role-banner" class="role-banner hidden"></div>
+
+      <!-- View 1: Wellness Dashboard & Longitudinal Mood Logging -->
+      <section class="view-panel active" id="view-dashboard">
+        <div class="dashboard-grid">
+          <!-- Mood & Zero-Knowledge Reflective Journal Card -->
+          <div class="card mood-card">
+            <div class="card-header">
+              <h3>Longitudinal Mood & Reflective Journal Check-In</h3>
+              <span class="chip" id="e2ee-badge">🔒 AES-GCM-256 Ready</span>
+            </div>
+            <p class="card-desc">Record quantitative mood valence (1–5 Likert), qualitative tags, and encrypted reflections with real-time crisis triage screening.</p>
+
+            <div class="mood-selector" role="radiogroup" aria-label="Mood rating">
+              <button type="button" class="mood-btn" data-rating="1" data-label="Exhausted">😫<br><span>1 • Drained</span></button>
+              <button type="button" class="mood-btn" data-rating="2" data-label="Overwhelmed">😰<br><span>2 • Anxious</span></button>
+              <button type="button" class="mood-btn" data-rating="3" data-label="Neutral">😐<br><span>3 • Neutral</span></button>
+              <button type="button" class="mood-btn active" data-rating="4" data-label="Focused">🙂<br><span>4 • Focused</span></button>
+              <button type="button" class="mood-btn" data-rating="5" data-label="Thriving">🚀<br><span>5 • Thriving</span></button>
+            </div>
+
+            <!-- Qualitative Valence Tags -->
+            <div class="mt-3">
+              <label class="small-label">Qualitative Valence & Academic Triggers (Select multiple):</label>
+              <div class="tag-pills-selector" id="mood-tags-container">
+                <button type="button" class="tag-pill active" data-tag="Exam & Midterm Prep">Exam & Midterm Prep</button>
+                <button type="button" class="tag-pill" data-tag="Assignment Backlog">Assignment Backlog</button>
+                <button type="button" class="tag-pill" data-tag="Sleep & Fatigue">Sleep & Fatigue</button>
+                <button type="button" class="tag-pill" data-tag="Social Isolation">Social Isolation</button>
+                <button type="button" class="tag-pill" data-tag="Career & Placement">Career & Placement</button>
+                <button type="button" class="tag-pill" data-tag="Mindfulness Flow">Mindfulness Flow</button>
+              </div>
+            </div>
+
+            <div class="form-group mt-3">
+              <div class="flex-between">
+                <label for="mood-notes">Reflective Journal Entry (Evaluated by Intelligent Triage):</label>
+                <label class="encrypt-toggle-label">
+                  <input type="checkbox" id="chk-encrypt-journal" />
+                  <span>Zero-Knowledge Client Encryption (AES-GCM-256)</span>
+                </label>
+              </div>
+              <input type="text" id="mood-notes" maxlength="2000" class="input-control mt-1" placeholder="Write your thoughts... (Real-time semantic risk screening active)" />
+            </div>
+
+            <div class="mt-3 flex-between wrap-gap">
+              <div style="display:flex; gap:0.6rem;">
+                <button class="btn btn-primary" id="btn-save-mood">Record Longitudinal Entry</button>
+                <button class="btn btn-secondary" id="btn-run-triage" type="button">🛡️ Screen Reflection</button>
+              </div>
+              <span id="mood-status-msg" class="status-feedback" role="status" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <!-- Clinical Longitudinal Metrics Summary -->
+          <div class="card metrics-card">
+            <div class="card-header">
+              <h3>Clinical Longitudinal Telemetry</h3>
+              <span class="chip" id="avg-mood-chip">Avg 3.3 / 5</span>
+            </div>
+            <div class="metric-row">
+              <div class="metric-box">
+                <span class="metric-val" id="metric-resilience">7.8/10</span>
+                <span class="metric-label">Resilience Index</span>
+              </div>
+              <div class="metric-box">
+                <span class="metric-val" id="metric-phq9">5 / 27</span>
+                <span class="metric-label" id="metric-phq9-sub">PHQ-9 (Mild)</span>
+              </div>
+              <div class="metric-box">
+                <span class="metric-val" id="metric-gad7">6 / 21</span>
+                <span class="metric-label" id="metric-gad7-sub">GAD-7 (Mild)</span>
+              </div>
+            </div>
+            <div class="mini-chart-container mt-3" id="mood-chart-bars" aria-label="Recent mood chart">
+              <div class="chart-bar" style="height: 60%;"><span class="bar-day">M</span></div>
+              <div class="chart-bar" style="height: 40%;"><span class="bar-day">T</span></div>
+              <div class="chart-bar" style="height: 85%;"><span class="bar-day">W</span></div>
+              <div class="chart-bar" style="height: 50%;"><span class="bar-day">T</span></div>
+              <div class="chart-bar" style="height: 75%;"><span class="bar-day">F</span></div>
+              <div class="chart-bar" style="height: 90%;"><span class="bar-day">S</span></div>
+              <div class="chart-bar active" style="height: 80%;"><span class="bar-day">S</span></div>
+            </div>
+            <div class="mt-4 flex-between">
+              <small class="text-subtle">Standardized Inventory Screening:</small>
+              <button class="btn btn-ghost btn-sm" onclick="switchTab('assessments')">Take PHQ-9 / GAD-7 &rarr;</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Logs & Upcoming Telehealth Consultations -->
+        <div class="dashboard-grid mt-4">
+          <div class="card">
+            <div class="card-header">
+              <h3>Scheduled Care & WebRTC Telehealth Rooms</h3>
+              <button class="btn btn-ghost" onclick="switchTab('counselors')">Care Directory +</button>
+            </div>
+            <div id="booking-list" class="item-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Longitudinal Mood & Journal Log</h3>
+              <span class="text-subtle" id="mood-total-count"></span>
+            </div>
+            <div id="mood-history-list" class="item-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View 2: Standardized Psychometric Assessments (PHQ-9 & GAD-7) -->
+      <section class="view-panel" id="view-assessments">
+        <div class="panel-header flex-between wrap-gap">
+          <div>
+            <h2>Standardized Clinical Psychometric Inventories (PHQ-9 & GAD-7)</h2>
+            <p>Validated longitudinal diagnostic screening frameworks for depression severity (PHQ-9) and generalized anxiety (GAD-7).</p>
+          </div>
+          <div class="tab-pill-group">
+            <button type="button" class="btn btn-primary" id="tab-btn-phq9" onclick="switchAssessmentInstrument('PHQ-9')">PHQ-9 (Depression • 9 Items)</button>
+            <button type="button" class="btn btn-secondary" id="tab-btn-gad7" onclick="switchAssessmentInstrument('GAD-7')">GAD-7 (Anxiety • 7 Items)</button>
+          </div>
+        </div>
+
+        <div class="dashboard-grid mt-3">
+          <div class="card">
+            <div class="card-header">
+              <h3 id="assessment-form-title">PHQ-9 Patient Health Questionnaire</h3>
+              <span class="chip" id="assessment-live-score">Current Score: 0 / 27</span>
+            </div>
+            <p class="card-desc">Over the last 2 weeks, how often have you been bothered by any of the following problems?</p>
+            <div id="assessment-questions-list" class="assessment-questions-list">
+              <!-- Populated by JS -->
+            </div>
+            <div class="mt-4 flex-between">
+              <button type="button" class="btn btn-primary" id="btn-submit-assessment">Compute & Save Clinical Score</button>
+              <span id="assessment-feedback-msg" class="status-feedback"></span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Longitudinal Psychometric History</h3>
+              <span class="chip">Clinical Grading</span>
+            </div>
+            <div class="severity-legend-box">
+              <small class="text-subtle">Standardized Scoring Thresholds:</small>
+              <div class="legend-pills mt-2">
+                <span class="slot-pill">0–4 Minimal</span>
+                <span class="slot-pill">5–9 Mild</span>
+                <span class="slot-pill">10–14 Moderate</span>
+                <span class="slot-pill">15+ Severe</span>
+              </div>
+            </div>
+            <div id="assessment-history-list" class="item-list mt-3">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View 3: Direct Provider Care Directory (BetterHelp / Zocdoc Benchmark) -->
+      <section class="view-panel" id="view-counselors">
+        <div class="panel-header flex-between wrap-gap">
+          <div>
+            <h2>Direct Provider Care Directory & Telehealth</h2>
+            <p>Verified clinical psychologists, CBT/ACT/DBT practitioners, and peer mentors with integrated P2P WebRTC video rooms.</p>
+          </div>
+          <div class="filter-bar">
+            <input type="search" id="counselor-search" class="input-control search-input" placeholder="Search name, modality, or language..." aria-label="Search providers" />
+            <select id="counselor-modality-filter" class="input-control filter-select" aria-label="Filter by therapeutic modality">
+              <option value="ALL">All Modalities (CBT, ACT, DBT...)</option>
+              <option value="CBT">CBT (Cognitive Behavioral)</option>
+              <option value="ACT">ACT (Acceptance & Commitment)</option>
+              <option value="DBT">DBT & Trauma-Informed Care</option>
+              <option value="MBSR">MBSR (Mindfulness Stress Reduction)</option>
+            </select>
+            <select id="counselor-language-filter" class="input-control filter-select" aria-label="Filter by language">
+              <option value="ALL">All Languages</option>
+              <option value="English">English</option>
+              <option value="Hindi">Hindi</option>
+              <option value="Telugu">Telugu</option>
+              <option value="Spanish">Spanish</option>
+              <option value="Mandarin">Mandarin</option>
+              <option value="French">French</option>
+            </select>
+            <select id="counselor-specialty-filter" class="input-control filter-select" aria-label="Filter by specialty">
+              <option value="ALL">All Specialties</option>
+              <option value="Burnout">Academic Burnout & Anxiety</option>
+              <option value="Isolation">Social Isolation & First-Year</option>
+              <option value="Crisis">Clinical Depression & Crisis</option>
+              <option value="Sleep">Sleep & Executive Function</option>
+            </select>
+          </div>
+        </div>
+        <div class="counselor-grid" id="counselor-container">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- View 4: Autonomic Regulation Engine (Guided Pacing & Somatic Grounding) -->
+      <section class="view-panel" id="view-destress">
+        <div class="panel-header flex-between wrap-gap">
+          <div>
+            <h2>Autonomic Regulation Engine & Somatic Grounding</h2>
+            <p>Deterministic breath pacing (4-7-8 Vagal Stimulation, 4-4-4-4 Box Breathing, 5-5 Coherent HRV) and neuro-acoustic synthesis.</p>
+          </div>
+          <div class="tab-pill-group">
+            <button type="button" class="btn btn-primary breath-mode-btn" data-mode="4-7-8">4-7-8 Vagal Pacer</button>
+            <button type="button" class="btn btn-secondary breath-mode-btn" data-mode="4-4-4-4">4-4-4-4 Box Breathing</button>
+            <button type="button" class="btn btn-secondary breath-mode-btn" data-mode="5-5">5-5 Coherent HRV</button>
+          </div>
+        </div>
+        <div class="destress-grid">
+          <!-- Deterministic Breath Pacer -->
+          <div class="card destress-card">
+            <div class="card-header">
+              <h3 id="breath-mode-title">4-7-8 Autonomic Vagal Breathing</h3>
+              <span class="chip" id="breath-cycle-count">0 Cycles</span>
+            </div>
+            <p class="card-desc" id="breath-mode-desc">4s Inhale • 7s Hold • 8s Exhale — Activates parasympathetic vagal tone for acute anxiety suppression.</p>
+            <div class="breathing-circle-wrapper">
+              <div class="breathing-circle" id="breath-circle">
+                <span id="breath-text">Ready</span>
+              </div>
+            </div>
+            <div class="flex-center mt-3">
+              <button class="btn btn-primary" id="btn-toggle-breath">Start Guided Breath Pacer</button>
+            </div>
+          </div>
+
+          <!-- Binaural / Sound Generator + Focus Timer -->
+          <div class="card destress-card">
+            <h3>Ambient Sound Machine (Web Audio API)</h3>
+            <p class="card-desc">Synthesized real-time audio frequencies to eliminate distraction and lower cortisol levels.</p>
+            <div class="audio-controls mt-3">
+              <div class="sound-item">
+                <div>
+                  <strong>Alpha Brainwaves (210Hz)</strong>
+                  <small class="block-sub">Deep Study Focus & Flow State</small>
+                </div>
+                <button class="btn btn-secondary sound-toggle" data-type="alpha">Play</button>
+              </div>
+              <div class="sound-item mt-3">
+                <div>
+                  <strong>Theta Waves (140Hz)</strong>
+                  <small class="block-sub">Autonomic Nervous System De-escalation</small>
+                </div>
+                <button class="btn btn-secondary sound-toggle" data-type="theta">Play</button>
+              </div>
+              <div class="sound-item mt-3">
+                <div>
+                  <strong>Warm Somatic Drone (80Hz)</strong>
+                  <small class="block-sub">Cognitive Reset & Sensory Grounding</small>
+                </div>
+                <button class="btn btn-secondary sound-toggle" data-type="pink">Play</button>
+              </div>
+            </div>
+
+            <!-- Academic Pomodoro Reset Timer -->
+            <div class="focus-timer-box mt-4">
+              <div class="flex-between">
+                <div>
+                  <strong>Cognitive Recovery Sprint</strong>
+                  <small class="block-sub">25-minute mindful study interval</small>
+                </div>
+                <span class="timer-display" id="focus-timer-display">25:00</span>
+              </div>
+              <div class="flex-between mt-3">
+                <button class="btn btn-secondary" id="btn-toggle-timer">Start Sprint</button>
+                <button class="btn btn-ghost" id="btn-reset-timer">Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View 5: Peer Support Forum -->
+      <section class="view-panel" id="view-community">
+        <div class="panel-header flex-between wrap-gap">
+          <div>
+            <h2>Safe Peer Support Forum</h2>
+            <p>Share academic struggles anonymously. Protected by real-time semantic crisis triage screening.</p>
+          </div>
+          <div class="filter-bar">
+            <input type="search" id="forum-search" class="input-control search-input" placeholder="Search discussions..." aria-label="Search forum discussions" />
+            <select id="forum-category-filter" class="input-control filter-select" aria-label="Filter forum by category">
+              <option value="ALL">All Categories</option>
+              <option value="Academic">Academic Stress</option>
+              <option value="Exam">Exam Anxiety & Burnout</option>
+              <option value="Sleep">Sleep & Routine</option>
+              <option value="Social">Social & Campus Life</option>
+            </select>
+            <button class="btn btn-primary" id="btn-open-post-modal">+ Start Discussion</button>
+          </div>
+        </div>
+
+        <div class="forum-container mt-3" id="forum-posts-container">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- View 6: Privacy & Data Governance (HIPAA / GDPR Health Tech) -->
+      <section class="view-panel" id="view-governance">
+        <div class="panel-header flex-between wrap-gap">
+          <div>
+            <h2>Privacy, Zero-Knowledge Encryption & HIPAA/GDPR Governance</h2>
+            <p>Client-side AES-GCM-256 key management, 30-day ephemeral storage retention, audit trails, and instant data erasure.</p>
+          </div>
+          <span class="chip">🛡️ HIPAA & GDPR Art. 17 Compliant</span>
+        </div>
+
+        <div class="dashboard-grid mt-3">
+          <div class="card">
+            <h3>Zero-Knowledge Encryption & Data Controls</h3>
+            <p class="card-desc">Reflective journal notes encrypted with AES-GCM-256 can only be decrypted by your local browser key.</p>
+            <div class="governance-stat-box">
+              <div class="flex-between">
+                <span>Client AES-GCM-256 Key Fingerprint:</span>
+                <code id="crypto-key-fingerprint" class="mono-badge">Generating...</code>
+              </div>
+              <div class="flex-between mt-3">
+                <span>Ephemeral Retention Window:</span>
+                <strong>30 Days Automated Purge</strong>
+              </div>
+            </div>
+            <div class="mt-4 flex-between wrap-gap">
+              <button type="button" class="btn btn-secondary" id="btn-export-data">⬇️ Export My Data (GDPR JSON)</button>
+              <button type="button" class="btn btn-secondary" id="btn-ephemeral-sweep">🧹 Run 30-Day Retention Sweep</button>
+              <button type="button" class="btn btn-danger" id="btn-purge-data">🗑️ Purge All Personal Data</button>
+            </div>
+            <p id="governance-status-msg" class="status-feedback mt-3"></p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Immutable Compliance Audit Trail</h3>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="fetchGovernanceAudit()">Refresh</button>
+            </div>
+            <div id="audit-log-list" class="item-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View 7: Crisis Support & Localized Global Hotlines -->
+      <section class="view-panel" id="view-crisis">
+        <div class="crisis-banner">
+          <div class="flex-between wrap-gap">
+            <div>
+              <h2>Global Emergency & Crisis Interception Hub</h2>
+              <p>Geo-routed 24/7 emergency hotlines (988 US/CA, 112 EU, 14416 India Tele-MANAS) with one-touch dialing.</p>
+            </div>
+            <div style="display:flex; gap:0.75rem; align-items:center;">
+              <select id="crisis-region-filter" class="input-control filter-select" aria-label="Filter crisis hotlines by region">
+                <option value="ALL">🌍 All Global Regions</option>
+                <option value="India">🇮🇳 India (14416 Tele-MANAS)</option>
+                <option value="US/CA">🇺🇸🇨🇦 US & Canada (988 Lifeline)</option>
+                <option value="EU">🇪🇺 European Union (112 Emergency)</option>
+              </select>
+              <span class="crisis-sla-badge">⚡ Zero Wait SLA</span>
+            </div>
+          </div>
+          
+          <div class="crisis-contacts-grid mt-4" id="crisis-hotlines-grid">
+            <div class="crisis-box" data-region="US/CA">
+              <span class="chip">US & Canada</span>
+              <h3 class="mt-2">988 Suicide & Crisis Lifeline</h3>
+              <p class="phone-number"><a href="tel:988" class="crisis-tel-link">988</a></p>
+              <p>Call or Text 24/7/365 — Free & Confidential across US & Canada</p>
+              <a href="tel:988" class="btn btn-danger mt-3 inline-btn">📞 Dial 988 (US/CA)</a>
+            </div>
+            <div class="crisis-box" data-region="EU">
+              <span class="chip">European Union</span>
+              <h3 class="mt-2">European Emergency & Mental Health</h3>
+              <p class="phone-number"><a href="tel:112" class="crisis-tel-link">112</a></p>
+              <p>Pan-European 24/7 emergency dispatch & acute psychological triage</p>
+              <a href="tel:112" class="btn btn-danger mt-3 inline-btn">📞 Dial 112 (EU)</a>
+            </div>
+            <div class="crisis-box" data-region="India">
+              <span class="chip">India (MoHFW)</span>
+              <h3 class="mt-2">Tele-MANAS National Helpline</h3>
+              <p class="phone-number"><a href="tel:14416" class="crisis-tel-link">14416</a></p>
+              <p>24/7 toll-free multilingual mental health care (or 1800-891-4416)</p>
+              <a href="tel:14416" class="btn btn-danger mt-3 inline-btn">📞 Dial 14416 (India)</a>
+            </div>
+            <div class="crisis-box" data-region="Campus">
+              <span class="chip">University 24/7</span>
+              <h3 class="mt-2">Campus Psychological Services (CAPS)</h3>
+              <p class="phone-number"><a href="tel:+18005559355" class="crisis-tel-link">+1 (800) 555-WELL</a></p>
+              <p>On-call clinical psychologists & SMS Text HOME to 741741</p>
+              <a href="tel:+18005559355" class="btn btn-secondary mt-3 inline-btn">🏥 Call Campus CAPS</a>
+            </div>
+          </div>
+
+          <div class="card mt-4 grounding-card">
+            <h3>5-4-3-2-1 Somatic Sensory Grounding Protocol</h3>
+            <p class="card-desc">If you are experiencing an acute panic attack or dissociation, anchor yourself by checking each step:</p>
+            <div class="grounding-list">
+              <label class="grounding-item"><input type="checkbox" /> <strong>5 things you can see</strong> around your desk or room right now.</label>
+              <label class="grounding-item"><input type="checkbox" /> <strong>4 things you can physically feel</strong> (feet on floor, chair support).</label>
+              <label class="grounding-item"><input type="checkbox" /> <strong>3 things you can hear</strong> in the background.</label>
+              <label class="grounding-item"><input type="checkbox" /> <strong>2 things you can smell</strong> or take two slow 4-7-8 breaths.</label>
+              <label class="grounding-item"><input type="checkbox" /> <strong>1 positive affirmation</strong> about your safety and resilience right now.</label>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Booking Modal (<dialog closedby="any"> per modern-web-guidance) -->
+  <dialog class="modal-dialog" id="modal-booking" closedby="any" aria-labelledby="modal-counselor-name">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-counselor-name">Schedule Provider Session</h3>
+        <button type="button" class="modal-close" onclick="closeModal('modal-booking')" aria-label="Close booking dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="booking-date">Select Date:</label>
+          <input type="date" id="booking-date" class="input-control" value="2026-11-15">
+        </div>
+        <div class="form-group mt-3">
+          <label for="booking-slot">Available Time Slot:</label>
+          <select id="booking-slot" class="input-control">
+            <option>10:00 AM</option>
+            <option>02:30 PM</option>
+            <option>04:00 PM</option>
+          </select>
+        </div>
+        <div class="form-group mt-3">
+          <label for="booking-mode">Consultation Pipeline:</label>
+          <select id="booking-mode" class="input-control">
+            <option>Encrypted WebRTC Video</option>
+            <option>Anonymous WebRTC Audio</option>
+            <option>Zero-Knowledge E2EE Chat</option>
+          </select>
+        </div>
+        <div class="form-group mt-3">
+          <label for="booking-notes">Session Goal / Clinical Focus (Optional):</label>
+          <input type="text" id="booking-notes" class="input-control" placeholder="e.g. CBT cognitive restructuring, exam anxiety..." />
+        </div>
+        <p id="booking-error-msg" class="error-feedback hidden"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-booking')">Cancel</button>
+        <button type="button" class="btn btn-primary" id="btn-confirm-booking">Confirm Booking</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Integrated WebRTC Telehealth Consultation Modal (Blueprint Section 4) -->
+  <dialog class="modal-dialog telehealth-dialog" id="modal-telehealth" closedby="any" aria-labelledby="telehealth-title">
+    <div class="modal-content telehealth-modal-content">
+      <div class="modal-header">
+        <div>
+          <h3 id="telehealth-title">🎥 Encrypted WebRTC Telehealth Room</h3>
+          <small id="telehealth-fingerprint" class="mono-badge">DTLS-SRTP Initializing...</small>
+        </div>
+        <button type="button" class="modal-close" onclick="endTelehealthSession()" aria-label="Close telehealth room">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="webrtc-stage">
+          <div class="webrtc-video-box">
+            <video id="webrtc-local-video" autoplay muted playsinline></video>
+            <canvas id="webrtc-fallback-canvas" width="360" height="220"></canvas>
+            <span class="video-label">You (Encrypted Client Stream)</span>
+          </div>
+          <div class="webrtc-video-box remote-box">
+            <div class="remote-avatar-pulse" id="telehealth-provider-avatar">👩‍⚕️</div>
+            <strong id="telehealth-provider-name">Sarah Jenkins, MSW</strong>
+            <small id="telehealth-provider-modality" class="text-subtle">CBT Specialist • P2P Connected</small>
+            <span class="video-label">Verified Provider Stream</span>
+          </div>
+        </div>
+        <div class="telehealth-controls mt-3">
+          <button type="button" class="btn btn-secondary" id="btn-toggle-mic">🎙️ Mic: On</button>
+          <button type="button" class="btn btn-secondary" id="btn-toggle-cam">📷 Camera: Simulated P2P</button>
+          <button type="button" class="btn btn-danger" onclick="endTelehealthSession()">📞 End Consultation</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Create Forum Post Modal (<dialog closedby="any">) -->
+  <dialog class="modal-dialog" id="modal-post" closedby="any" aria-labelledby="modal-post-heading">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-post-heading">Create Confidential Discussion</h3>
+        <button type="button" class="modal-close" onclick="closeModal('modal-post')" aria-label="Close discussion dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="post-category">Category:</label>
+          <select id="post-category" class="input-control">
+            <option value="Academic Stress">Academic Stress</option>
+            <option value="Exam Anxiety & Burnout">Exam Anxiety & Burnout</option>
+            <option value="Social & Campus Life">Social & Campus Life</option>
+            <option value="Sleep & Routine">Sleep & Routine</option>
+          </select>
+        </div>
+        <div class="form-group mt-3">
+          <label for="post-title">Discussion Title:</label>
+          <input type="text" id="post-title" class="input-control" placeholder="Summarize your situation or question...">
+        </div>
+        <div class="form-group mt-3">
+          <label for="post-body">Detailed Thoughts:</label>
+          <textarea id="post-body" class="input-control" rows="4" placeholder="Express yourself safely. Respectful community guidelines apply."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-post')">Cancel</button>
+        <button type="button" class="btn btn-primary" id="btn-submit-post">Publish Post</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Autonomous Emergency Crisis Intervention Overlay (Blueprint Section 1, 2A & 3) -->
+  <dialog class="modal-dialog safety-dialog" id="modal-safety" closedby="any" aria-labelledby="safety-modal-title">
+    <div class="modal-content safety-modal-content">
+      <div class="modal-header">
+        <h3 id="safety-modal-title">🚨 Autonomous Crisis Safety Interception</h3>
+        <button type="button" class="modal-close" onclick="closeModal('modal-safety')" aria-label="Close safety dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Our real-time semantic triage engine detected acute distress indicators. You do not have to carry this alone — immediate, confidential human support is available 24/7 in your region:</p>
+        <div class="safety-hotline-list mt-3" id="safety-modal-hotlines">
+          <a href="tel:988" class="safety-hotline-item">
+            <strong>📞 988 Suicide & Crisis Lifeline (US / Canada)</strong>
+            <span>One-touch dial or text 988 — Free, confidential 24/7</span>
+          </a>
+          <a href="tel:112" class="safety-hotline-item">
+            <strong>🇪🇺 112 European Emergency & Mental Health Triage (EU)</strong>
+            <span>Pan-European 24/7 crisis response</span>
+          </a>
+          <a href="tel:14416" class="safety-hotline-item">
+            <strong>🇮🇳 14416 Tele-MANAS National Helpline (India)</strong>
+            <span>24/7 toll-free multilingual mental health support (or 1800-891-4416)</span>
+          </a>
+          <a href="tel:+18005559355" class="safety-hotline-item">
+            <strong>🏥 Campus CAPS Urgent Care: +1 (800) 555-WELL</strong>
+            <span>Immediate on-duty university clinical responder</span>
+          </a>
+        </div>
+        <div class="mt-3 grounding-suggestion-banner" id="safety-suggested-exercise">
+          Recommended Immediate Regulation: <strong>4-7-8 Vagal Stimulation Breathing & 5-4-3-2-1 Sensory Grounding</strong>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-safety'); switchTab('destress');">Start 4-7-8 Breathing</button>
+        <button type="button" class="btn btn-danger" onclick="closeModal('modal-safety'); switchTab('crisis');">Open Global Crisis Hub</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
